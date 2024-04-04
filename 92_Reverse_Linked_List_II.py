@@ -5,29 +5,51 @@
 #         self.next = next
 class Solution:
     def reverseBetween(self, head: Optional[ListNode], left: int, right: int) -> Optional[ListNode]:
-        currentPosition = 1
-        currentNode = head
-        startNode = head
+        dummy = ListNode(0, head)
+        cur = head
+        startLeft = dummy
         
-        while currentPosition < left:
-            startNode = currentNode
-            currentNode = currentNode.next
-            currentPosition += 1
+        for i in range(left - 1):
+            startLeft = cur
+            cur = cur.next
         
-        previousNode = None
-        tailNode = currentNode
+        prev = None
         
-        while currentPosition <= right:
-            nextNode = currentNode.next
-            currentNode.next = previousNode
-            previousNode = currentNode
-            currentNode = nextNode
-            currentPosition += 1
+        for i in range(right - left + 1):
+            nextNode = cur.next
+            cur.next = prev
+            prev = cur
+            cur = nextNode
         
-        startNode.next = previousNode
-        tailNode.next = currentNode
+        startLeft.next.next = cur
+        startLeft.next = prev
         
-        if left > 1:
-            return head
+        return dummy.next
+
+
+        # currentPosition = 1
+        # currentNode = head
+        # startNode = head
         
-        return previousNode
+        # while currentPosition < left:
+        #     startNode = currentNode
+        #     currentNode = currentNode.next
+        #     currentPosition += 1
+        
+        # previousNode = None
+        # tailNode = currentNode
+        
+        # while currentPosition <= right:
+        #     nextNode = currentNode.next
+        #     currentNode.next = previousNode
+        #     previousNode = currentNode
+        #     currentNode = nextNode
+        #     currentPosition += 1
+        
+        # startNode.next = previousNode
+        # tailNode.next = currentNode
+        
+        # if left > 1:
+        #     return head
+        
+        # return previousNode
