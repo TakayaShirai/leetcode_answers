@@ -1,63 +1,63 @@
 class MinStack {
-    private var head: Node?
+  private var head: Node?
 
-    init() {
-        self.head = nil
-    }
-    
-    func push(_ val: Int) {
-        head = Node(val, min(val, head?.min ?? val), head)
-    }
-    
-    func pop() {
-        head = head?.next
-    }
-    
-    func top() -> Int {
-        return head!.value
-    }
-    
-    func getMin() -> Int {
-        return head!.min
-    }
-    
-    private class Node {
-        var value: Int
-        var min: Int
-        var next: Node?
-        
-        init(_ value: Int, _ min: Int, _ next: Node?) {
-            self.value = value
-            self.min = min
-            self.next = next
-        }
-    }
-    
-//     private var stack: [Int] = []
-//     private var minStack: [Int] = []
-    
-//     init() {
-//         self.stack = []
-//         self.minStack = []
-//     }
+  init() {
+    self.head = nil
+  }
 
-//     func push(_ val: Int) {
-//         stack.append(val)
-//         minStack.append(min(minStack.last ?? val, val))
-//     }
-    
-//     func pop() {
-//         stack.popLast()
-//         minStack.popLast()
-//     }
-    
-//     func top() -> Int {
-//         return stack.last!
-//     }
-    
-//     func getMin() -> Int {
-//         return minStack.last!
-//     }
+  func push(_ val: Int) {
+    head = Node(val, min(val, head?.min ?? val), head)
+  }
+
+  func pop() {
+    head = head?.next
+  }
+
+  func top() -> Int {
+    return head!.value
+  }
+
+  func getMin() -> Int {
+    return head!.min
+  }
+
+  private class Node {
+    var value: Int
+    var min: Int
+    var next: Node?
+
+    init(_ value: Int, _ min: Int, _ next: Node?) {
+      self.value = value
+      self.min = min
+      self.next = next
+    }
+  }
+
+  //     private var stack: [Int] = []
+  //     private var minStack: [Int] = []
+
+  //     init() {
+  //         self.stack = []
+  //         self.minStack = []
+  //     }
+
+  //     func push(_ val: Int) {
+  //         stack.append(val)
+  //         minStack.append(min(minStack.last ?? val, val))
+  //     }
+
+  //     func pop() {
+  //         stack.popLast()
+  //         minStack.popLast()
+  //     }
+
+  //     func top() -> Int {
+  //         return stack.last!
+  //     }
+
+  //     func getMin() -> Int {
+  //         return minStack.last!
+  //     }
 }
 
 /**
@@ -68,4 +68,3 @@ class MinStack {
  * let ret_3: Int = obj.top()
  * let ret_4: Int = obj.getMin()
  */
-
