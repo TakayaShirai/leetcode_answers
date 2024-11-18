@@ -7,11 +7,29 @@ class Solution {
       let curGap = releaseTimes[i] - releaseTimes[i - 1]
       let curChar = arrayKeys[i]
 
-      if curGap > slowestKey.gap || (curGap == slowestKey.gap && curChar > slowestKey.char) {
+      if hasLargerGap(cur: curGap, largest: slowestKey.gap)
+        || hasSameGapAndLargerLexOrder(cur: (curGap, curChar), slowest: slowestKey)
+      {
         slowestKey = (curGap, curChar)
       }
     }
 
     return slowestKey.char
+  }
+
+  func hasLargerGap(cur: Int, largest: Int) -> Bool {
+    if cur > largest {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  func hasSameGapAndLargerLexOrder(cur: (Int, Character), slowest: (Int, Character)) -> Bool {
+    if cur.0 == slowest.0 && cur.1 > slowest.1 {
+      return true
+    } else {
+      return false
+    }
   }
 }
