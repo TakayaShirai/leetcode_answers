@@ -1,25 +1,22 @@
 class Solution {
-  /// isValid returns if the input string of parentheses is valid.
   func isValid(_ s: String) -> Bool {
-    var pairs: [Character: Character] = ["(": ")", "{": "}", "[": "]"]
+    var parenMap: [Character: Character] = [")": "(", "}": "{", "]": "["]
+    var leftParenStack: [Character] = []
 
-    var stack: [Character] = []
+    for paren in s {
+      if let matchedLeftParen = parenMap[paren] {
+        guard !leftParenStack.isEmpty else { return false }
 
-    for parenthes in s {
-      if pairs.keys.contains(parenthes) {
-        stack.append(parenthes)
-      } else {
-        if stack.isEmpty {
+        let poppedLeftParen = leftParenStack.popLast()
+
+        if matchedLeftParen != poppedLeftParen {
           return false
-        } else {
-          var poppedParenthes = stack.popLast()!
-
-          if parenthes != pairs[poppedParenthes] {
-            return false
-          }
         }
+      } else {
+        leftParenStack.append(paren)
       }
     }
-    return stack.isEmpty
+
+    return leftParenStack.isEmpty
   }
 }
