@@ -1,43 +1,37 @@
 class Solution {
   func isPalindrome(_ s: String) -> Bool {
-    var forwardPointer: String.Index = s.startIndex
-    var backwardPointer: String.Index = s.index(before: s.endIndex)
+    let lowercasedS = s.lowercased()
+    let arrayS = Array(lowercasedS)
+    let onlyAlphaNumArrayS = removeNonAlphaChars(arrayS)
 
-    while forwardPointer < backwardPointer {
-      while !isAlphaNum(s[forwardPointer]) && forwardPointer < backwardPointer {
-        forwardPointer = s.index(after: forwardPointer)
-      }
+    var leftIdx: Int = 0
+    var rightIdx: Int = onlyAlphaNumArrayS.count - 1
 
-      while !isAlphaNum(s[backwardPointer]) && forwardPointer < backwardPointer {
-        backwardPointer = s.index(before: backwardPointer)
-      }
-
-      if s[forwardPointer].lowercased() != s[backwardPointer].lowercased() {
+    while leftIdx < rightIdx {
+      if onlyAlphaNumArrayS[leftIdx] != onlyAlphaNumArrayS[rightIdx] {
         return false
       }
 
-      if forwardPointer == backwardPointer {
-        return true
-      }
-
-      forwardPointer = s.index(after: forwardPointer)
-      backwardPointer = s.index(before: backwardPointer)
+      leftIdx += 1
+      rightIdx -= 1
     }
 
     return true
   }
 
-  func isAlphaNum(_ char: Character) -> Bool {
-    if ("A".unicodeScalars.first!.value <= char.unicodeScalars.first!.value
-      && "Z".unicodeScalars.first!.value >= char.unicodeScalars.first!.value)
-      || ("a".unicodeScalars.first!.value <= char.unicodeScalars.first!.value
-        && "z".unicodeScalars.first!.value >= char.unicodeScalars.first!.value)
-      || ("0".unicodeScalars.first!.value <= char.unicodeScalars.first!.value
-        && "9".unicodeScalars.first!.value >= char.unicodeScalars.first!.value)
-    {
-      return true
-    } else {
-      return false
+  private func removeNonAlphaChars(_ charArray: [Character]) -> [Character] {
+    var convertedArray: [Character] = []
+
+    for char in charArray {
+      if isAlNum(char) {
+        convertedArray.append(char)
+      }
     }
+
+    return convertedArray
+  }
+
+  private func isAlNum(_ char: Character) -> Bool {
+    return char.isLetter || char.isNumber
   }
 }
