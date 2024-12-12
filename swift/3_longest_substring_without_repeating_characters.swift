@@ -1,28 +1,26 @@
 class Solution {
   func lengthOfLongestSubstring(_ s: String) -> Int {
-    if s.count == 0 {
-      return 0
-    }
+    guard s.count >= 1 else { return 0 }
 
-    var left: String.Index = s.startIndex
-    var right: String.Index = s.index(after: left)
+    let arrayS = Array(s)
 
-    var seenChars: [Character: String.Index] = [s[s.startIndex]: s.startIndex]
+    var hashSet: [Character: Int] = [arrayS[0]: 0]
+    var longestLen: Int = 1
 
-    var maxLength: Int = 1
+    var left: Int = 0
 
-    while right < s.endIndex {
-      if let duplicateIndex = seenChars[s[right]], duplicateIndex >= left {
-        left = s.index(after: duplicateIndex)
+    for right in 1..<arrayS.count {
+      if let seenCharIdx = hashSet[arrayS[right]] {
+        if seenCharIdx >= left {
+          longestLen = max(right - left, longestLen)
+          left = seenCharIdx + 1
+        }
       }
 
-      seenChars[s[right]] = right
-
-      maxLength = max(maxLength, s.distance(from: left, to: right) + 1)
-
-      right = s.index(after: right)
+      longestLen = max(right - left + 1, longestLen)
+      hashSet[arrayS[right]] = right
     }
 
-    return maxLength
+    return longestLen
   }
 }
