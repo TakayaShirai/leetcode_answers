@@ -1,52 +1,64 @@
 class Solution {
   func threeSum(_ nums: [Int]) -> [[Int]] {
-    // Two Pointers Approach
+    let sortedNums: [Int] = nums.sorted()
     var triplets: [[Int]] = []
-    var sortedNums = nums.sorted()
 
-    for (i, fixedNum) in sortedNums.enumerated() {
-      if i > 0 && fixedNum == sortedNums[i - 1] {
+    for (fixedNumIdx, fixedNum) in sortedNums.enumerated() {
+      if fixedNumIdx != 0 && fixedNum == sortedNums[fixedNumIdx - 1] {
         continue
       }
 
-      var left: Int = i + 1
+      var left: Int = fixedNumIdx + 1
       var right: Int = sortedNums.count - 1
 
       while left < right {
-        var sum = sortedNums[left] + sortedNums[right] + fixedNum
+        let currentThreeSum = fixedNum + sortedNums[left] + sortedNums[right]
 
-        if sum > 0 {
-          right -= 1
-        } else if sum < 0 {
+        if currentThreeSum == 0 {
+          triplets.append([fixedNum, sortedNums[left], sortedNums[right]])
           left += 1
-        } else {
-          triplets.append([sortedNums[left], sortedNums[right], fixedNum])
-          left += 1
-          while sortedNums[left] == sortedNums[left - 1] && left < right {
+          while left < right && sortedNums[left - 1] == sortedNums[left] {
             left += 1
           }
+        } else if currentThreeSum > 0 {
+          right -= 1
+        } else {
+          left += 1
         }
       }
     }
 
     return triplets
 
-    //         Hash Map Approach
-    //         var triplets = Set<[Int]>()
+    // var triplets: [[Int]: Int] = [:]
 
-    //         for i in 0..<(nums.count-2) {
-    //             var seen: [Int : Int] = [:]
-    //             var target = -1 * nums[i]
+    // for (fixedNumIdx, fixedNum) in nums.enumerated() {
+    //   var validPairs = twoSum(Array(nums[(fixedNumIdx + 1)...]), -fixedNum)
 
-    //             for j in (i+1)..<(nums.count) {
-    //                 if let _ = seen[target - nums[j]] {
-    //                     triplets.insert([nums[i], nums[j], target - nums[j]].sorted())
-    //                 } else {
-    //                     seen[nums[j]] = 1
-    //                 }
-    //             }
-    //         }
+    //   guard !validPairs.isEmpty else { continue }
 
-    //         return Array(triplets)
+    //   for pair in validPairs {
+    //     let threeSumRes = pair + [fixedNum]
+    //     let sortedThreeSumRes = threeSumRes.sorted()
+    //     triplets[sortedThreeSumRes] = 1
+    //   }
+    // }
+
+    // return Array(triplets.keys)
   }
+
+  // private func twoSum(_ nums: [Int], _ target: Int) -> [[Int]] {
+  //   var seenNums: [Int: Int] = [:]
+  //   var validPairs: [[Int]] = []
+
+  //   for (idx, num) in nums.enumerated() {
+  //     if let complementNum = seenNums[target - num] {
+  //       validPairs.append([num, complementNum])
+  //     } else {
+  //       seenNums[num] = num
+  //     }
+  //   }
+
+  //   return validPairs
+  // }
 }
