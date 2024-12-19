@@ -2,10 +2,9 @@ class Solution {
   func searchInsert(_ nums: [Int], _ target: Int) -> Int {
     var left: Int = 0
     var right: Int = nums.count - 1
-    var mid: Int = 0
 
     while left <= right {
-      mid = (left + right) / 2
+      let mid = left + (right - left) / 2
 
       if nums[mid] == target {
         return mid
