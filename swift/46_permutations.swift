@@ -1,20 +1,18 @@
 class Solution {
   func permute(_ nums: [Int]) -> [[Int]] {
-    if nums.count == 0 {
-      return [[]]
-    }
+    guard nums.count > 0 else { return [[]] }
 
-    let perms = permute(Array(nums[1...]))
-    var res: [[Int]] = []
+    var perms: [[Int]] = permute(Array(nums[1...]))
+    var resPerms: [[Int]] = []
 
     for perm in perms {
       for i in 0...perm.count {
         var curPerm = perm
         curPerm.insert(nums[0], at: i)
-        res.append(curPerm)
+        resPerms.append(curPerm)
       }
     }
 
-    return res
+    return resPerms
   }
 }
