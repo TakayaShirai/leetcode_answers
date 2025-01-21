@@ -1,22 +1,22 @@
 class Solution {
   func subsets(_ nums: [Int]) -> [[Int]] {
-    var res: [[Int]] = []
-    var subset: [Int] = []
+    var subsets: [[Int]] = []
 
-    func dfs(_ index: Int) {
-      if index == nums.count {
-        res.append(subset)
-        return
-      }
+    dfs(depth: 0, nums, curSubset: [], subsets: &subsets)
+    return subsets
+  }
 
-      subset.append(nums[index])
-      dfs(index + 1)
-
-      subset.removeLast()
-      dfs(index + 1)
+  private func dfs(depth: Int, _ nums: [Int], curSubset: [Int], subsets: inout [[Int]]) {
+    if depth == nums.count {
+      subsets.append(curSubset)
+      return
     }
 
-    dfs(0)
-    return res
+    var subset = curSubset
+    subset.append(nums[depth])
+    dfs(depth: depth + 1, nums, curSubset: subset, subsets: &subsets)
+
+    subset.removeLast()
+    dfs(depth: depth + 1, nums, curSubset: subset, subsets: &subsets)
   }
 }
