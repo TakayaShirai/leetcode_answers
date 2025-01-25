@@ -1,22 +1,26 @@
 class Solution {
   func merge(_ intervals: [[Int]]) -> [[Int]] {
     var sortedIntervals: [[Int]] = intervals.sorted { $0[0] < $1[0] }
+
+    var curIntervalLeft: Int = sortedIntervals[0][0]
+    var curIntervalRight: Int = sortedIntervals[0][1]
+
     var mergedIntervals: [[Int]] = []
 
-    var start: Int = sortedIntervals[0][0]
-    var end: Int = sortedIntervals[0][1]
+    for interval in sortedIntervals {
+      let nextIntervalLeft: Int = interval[0]
+      let nextIntervalRight: Int = interval[1]
 
-    for i in 1..<intervals.count {
-      if end < sortedIntervals[i][0] {
-        mergedIntervals.append([start, end])
-        start = sortedIntervals[i][0]
-        end = sortedIntervals[i][1]
+      if curIntervalRight >= nextIntervalLeft {
+        curIntervalRight = max(curIntervalRight, nextIntervalRight)
       } else {
-        end = max(end, sortedIntervals[i][1])
+        mergedIntervals.append([curIntervalLeft, curIntervalRight])
+        curIntervalLeft = nextIntervalLeft
+        curIntervalRight = nextIntervalRight
       }
     }
 
-    mergedIntervals.append([start, end])
+    mergedIntervals.append([curIntervalLeft, curIntervalRight])
 
     return mergedIntervals
   }
