@@ -1,24 +1,33 @@
 class Solution {
   func insert(_ intervals: [[Int]], _ newInterval: [Int]) -> [[Int]] {
-    var newInterval = newInterval
-    var newIntervals: [[Int]] = []
+    var insertedIntervals: [[Int]] = []
+    var nonInsertedInterval: [Int] = newInterval
+    var isNonIntervalInserted: Bool = false
 
-    for (idx, interval) in intervals.enumerated() {
-      if newInterval[1] < interval[0] {
-        newIntervals.append(newInterval)
-        newIntervals.append(contentsOf: intervals[idx..<intervals.count])
-        return newIntervals
-      } else if newInterval[0] > interval[1] {
-        newIntervals.append(interval)
+    for interval in intervals {
+      if isIntervalOverlapped(interval, nonInsertedInterval) {
+        nonInsertedInterval = [
+          min(interval[0], nonInsertedInterval[0]), max(interval[1], nonInsertedInterval[1]),
+        ]
+      } else if nonInsertedInterval[1] < interval[0] && !isNonIntervalInserted {
+        insertedIntervals.append(nonInsertedInterval)
+        insertedIntervals.append(interval)
+        isNonIntervalInserted = true
       } else {
-        let newStart = min(newInterval[0], interval[0])
-        let newEnd = max(newInterval[1], interval[1])
-        newInterval = [newStart, newEnd]
+        insertedIntervals.append(interval)
       }
     }
 
-    newIntervals.append(newInterval)
+    if !isNonIntervalInserted {
+      insertedIntervals.append(nonInsertedInterval)
+    }
 
-    return newIntervals
+    return insertedIntervals
+  }
+
+  private func isIntervalOverlapped(_ interval1: [Int], _ interval2: [Int]) -> Bool {
+    let firstInterval: [Int] = interval1[0] < interval2[0] ? interval1 : interval2
+    let secondInterval: [Int] = interval1[0] < interval2[0] ? interval2 : interval1
+    return firstInterval[1] >= secondInterval[0]
   }
 }
