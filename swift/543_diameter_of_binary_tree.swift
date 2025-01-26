@@ -13,21 +13,19 @@
 /// }
 class Solution {
   func diameterOfBinaryTree(_ root: TreeNode?) -> Int {
-    var res: Int = 0
+    var maxDiameter = 0
+    updateDiameterAndCountEdges(root, maxDiameter: &maxDiameter)
+    return maxDiameter
+  }
 
-    func dfs(_ root: TreeNode?) -> Int {
-      if root == nil {
-        return 0
-      }
+  private func updateDiameterAndCountEdges(_ node: TreeNode?, maxDiameter: inout Int) -> Int {
+    guard let node = node else { return 0 }
 
-      var leftHeight = dfs(root!.left)
-      var rightHeight = dfs(root!.right)
-      res = max(res, leftHeight + rightHeight)
+    let leftEdgesCnt = updateDiameterAndCountEdges(node.left, maxDiameter: &maxDiameter)
+    let rightEdgesCnt = updateDiameterAndCountEdges(node.right, maxDiameter: &maxDiameter)
 
-      return max(leftHeight, rightHeight) + 1
-    }
+    maxDiameter = max(maxDiameter, leftEdgesCnt + rightEdgesCnt)
 
-    dfs(root)
-    return res
+    return max(leftEdgesCnt, rightEdgesCnt) + 1
   }
 }
