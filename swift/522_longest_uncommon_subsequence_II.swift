@@ -1,17 +1,22 @@
 class Solution {
   func findLUSlength(_ strs: [String]) -> Int {
-    var sortedStrs: [String] = strs.sorted { $0.count > $1.count }
-    var duplicates: Set<String> = getDuplicates(strs)
+    var decOrderStrs: [String] = strs.sorted { $0.count > $1.count }
+    var duplicatedStr: Set<String> = getDuplicates(in: strs)
 
-    for (idx, str) in sortedStrs.enumerated() {
-      if !duplicates.contains(str) {
+    for (idx, str) in decOrderStrs.enumerated() {
+      if !duplicatedStr.contains(str) {
         guard idx != 0 else { return str.count }
+        var curIdx: Int = 0
 
-        for i in 0..<idx {
-          guard !isSubsequence(str, of: sortedStrs[i]) else { break }
-          if i == idx - 1 {
-            return str.count
+        while curIdx < idx {
+          while curIdx < idx && decOrderStrs[curIdx] == decOrderStrs[curIdx + 1] {
+            curIdx += 1
           }
+
+          guard !isSubsequence(str, of: decOrderStrs[curIdx]) else { break }
+          guard curIdx != idx - 1 else { return str.count }
+
+          curIdx += 1
         }
       }
     }
@@ -19,31 +24,31 @@ class Solution {
     return -1
   }
 
-  private func getDuplicates(_ strs: [String]) -> Set<String> {
-    var set: Set<String> = []
-    var duplicates: Set<String> = []
+  private func getDuplicates(in strs: [String]) -> Set<String> {
+    var duplicatedStrs: Set<String> = []
+    var seenStrsSet: Set<String> = []
 
     for str in strs {
-      if set.contains(str) {
-        duplicates.insert(str)
+      if seenStrsSet.contains(str) {
+        duplicatedStrs.insert(str)
       }
 
-      set.insert(str)
+      seenStrsSet.insert(str)
     }
 
-    return duplicates
+    return duplicatedStrs
   }
 
   private func isSubsequence(_ str1: String, of str2: String) -> Bool {
-    let str1Chars: [Character] = Array(str1)
-    var str1Idx: Int = 0
+    let inputStr1Chars: [Character] = Array(str1)
+    var curStr1Idx: Int = 0
 
     for char in str2 {
-      if str1Idx < str1.count && str1Chars[str1Idx] == char {
-        str1Idx += 1
+      if curStr1Idx < str1.count && inputStr1Chars[curStr1Idx] == char {
+        curStr1Idx += 1
       }
     }
 
-    return str1Idx == str1.count
+    return curStr1Idx == str1.count
   }
 }
