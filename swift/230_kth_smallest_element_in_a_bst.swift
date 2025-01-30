@@ -13,25 +13,23 @@
 /// }
 class Solution {
   func kthSmallest(_ root: TreeNode?, _ k: Int) -> Int {
-    guard let root = root else { return -1 }
-    var res: Int = -1
-    var cur: Int = 0
+    var kthMinVal: Int = 0
+    var curIdx: Int = 1
+    dfs(node: root, curIdx: &curIdx, kthMinVal: &kthMinVal, k: k)
+    return kthMinVal
+  }
 
-    func dfs(_ node: TreeNode?, _ index: Int) {
-      guard let node = node else { return }
+  private func dfs(node: TreeNode?, curIdx: inout Int, kthMinVal: inout Int, k: Int) {
+    guard let node = node else { return }
 
-      dfs(node.left, index)
-      cur += 1
+    dfs(node: node.left, curIdx: &curIdx, kthMinVal: &kthMinVal, k: k)
 
-      if cur == k {
-        res = node.val
-        return
-      }
-
-      dfs(node.right, cur + 1)
+    if curIdx == k {
+      kthMinVal = node.val
     }
 
-    dfs(root, cur)
-    return res
+    curIdx += 1
+
+    dfs(node: node.right, curIdx: &curIdx, kthMinVal: &kthMinVal, k: k)
   }
 }
