@@ -14,22 +14,17 @@
 class Solution {
   func invertTree(_ root: TreeNode?) -> TreeNode? {
     // return bfsInvertTree(root)
-    return dfsInvertTree(root)
+    return dfsInvertTree(node: root)
   }
 
-  func dfsInvertTree(_ root: TreeNode?) -> TreeNode? {
-    if root == nil {
-      return nil
-    }
+  func dfsInvertTree(node: TreeNode?) -> TreeNode? {
+    guard let node = node else { return nil }
 
-    var tmpLeft = root!.left
-    root!.left = root!.right
-    root!.right = tmpLeft
+    let tmp: TreeNode? = node.left
+    node.left = dfsInvertTree(node: node.right)
+    node.right = dfsInvertTree(node: tmp)
 
-    dfsInvertTree(root!.left)
-    dfsInvertTree(root!.right)
-
-    return root
+    return node
   }
 
   func bfsInvertTree(_ root: TreeNode?) -> TreeNode? {
