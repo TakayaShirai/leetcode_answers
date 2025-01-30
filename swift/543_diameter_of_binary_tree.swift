@@ -13,19 +13,23 @@
 /// }
 class Solution {
   func diameterOfBinaryTree(_ root: TreeNode?) -> Int {
-    var maxDiameter = 0
-    updateDiameterAndCountEdges(root, maxDiameter: &maxDiameter)
-    return maxDiameter
+    var curMaxDiameter = 0
+    computeTreeDepthAndCurrentMaxDiameter(root, curMaxDiameter: &curMaxDiameter)
+    return curMaxDiameter
   }
 
-  private func updateDiameterAndCountEdges(_ node: TreeNode?, maxDiameter: inout Int) -> Int {
+  private func computeTreeDepthAndCurrentMaxDiameter(_ node: TreeNode?, curMaxDiameter: inout Int)
+    -> Int
+  {
     guard let node = node else { return 0 }
 
-    let leftEdgesCnt = updateDiameterAndCountEdges(node.left, maxDiameter: &maxDiameter)
-    let rightEdgesCnt = updateDiameterAndCountEdges(node.right, maxDiameter: &maxDiameter)
+    let leftSubtreeDepth = computeTreeDepthAndCurrentMaxDiameter(
+      node.left, curMaxDiameter: &curMaxDiameter)
+    let rightSubtreeDepth = computeTreeDepthAndCurrentMaxDiameter(
+      node.right, curMaxDiameter: &curMaxDiameter)
 
-    maxDiameter = max(maxDiameter, leftEdgesCnt + rightEdgesCnt)
+    curMaxDiameter = max(curMaxDiameter, leftSubtreeDepth + rightSubtreeDepth)
 
-    return max(leftEdgesCnt, rightEdgesCnt) + 1
+    return max(leftSubtreeDepth, rightSubtreeDepth) + 1
   }
 }
