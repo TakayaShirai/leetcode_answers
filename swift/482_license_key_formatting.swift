@@ -1,52 +1,24 @@
 class Solution {
   func licenseKeyFormatting(_ s: String, _ k: Int) -> String {
-    var curGroup: [Character] = []
-    var resKey: String = ""
+    var reversedGroupsOfLicenseKey: [String] = []
+    var curGroupChars: [Character] = []
 
-    for char in s.reversed() {
-      if char != "-" {
-        curGroup.append(Character(char.uppercased()))
+    for char in s.reversed() where char != "-" {
+      curGroupChars.append(char)
 
-        if curGroup.count == k {
-          if resKey != "" {
-            resKey += ("-" + String(curGroup))
-          } else {
-            resKey += String(curGroup)
-          }
-
-          curGroup = []
-        }
+      if curGroupChars.count == k {
+        reversedGroupsOfLicenseKey.append(String(curGroupChars.reversed()))
+        curGroupChars.removeAll()
       }
     }
 
-    if !curGroup.isEmpty {
-      if resKey != "" {
-        resKey += ("-" + String(curGroup))
-      } else {
-        resKey += String(curGroup)
-      }
+    if !curGroupChars.isEmpty {
+      reversedGroupsOfLicenseKey.append(String(curGroupChars.reversed()))
     }
 
-    return String(resKey.reversed())
+    let dashJoinedLicenseKey = reversedGroupsOfLicenseKey.reversed().joined(separator: "-")
+    let uppercasedLicenseKey = dashJoinedLicenseKey.uppercased()
 
-    // var curGroup: [Character] = []
-    // var resKey: [String] = []
-
-    // for char in s.reversed() {
-    //     if char != "-" {
-    //         curGroup.append(Character(char.uppercased()))
-
-    //         if curGroup.count == k {
-    //             resKey.append(String(curGroup.reversed()))
-    //             curGroup = []
-    //         }
-    //     }
-    // }
-
-    // if !curGroup.isEmpty {
-    //     resKey.append(String(curGroup.reversed()))
-    // }
-
-    // return resKey.reversed().joined(separator: "-")
+    return uppercasedLicenseKey
   }
 }
