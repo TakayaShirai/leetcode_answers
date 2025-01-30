@@ -14,18 +14,20 @@
 class Solution {
   func findTilt(_ root: TreeNode?) -> Int {
     var totalTilt: Int = 0
-    calcSumOfTreeAndUpdateTotalTilt(root: root, totalTilt: &totalTilt)
+    calcSumOfTreeAndAccumulateTotalTilt(root: root, totalTilt: &totalTilt)
     return totalTilt
   }
 
-  private func calcSumOfTreeAndUpdateTotalTilt(root: TreeNode?, totalTilt: inout Int) -> Int {
+  private func calcSumOfTreeAndAccumulateTotalTilt(root: TreeNode?, totalTilt: inout Int) -> Int {
     guard let root = root else { return 0 }
 
-    let leftTreeSum: Int = calcSumOfTreeAndUpdateTotalTilt(root: root.left, totalTilt: &totalTilt)
-    let rightTreeSum: Int = calcSumOfTreeAndUpdateTotalTilt(root: root.right, totalTilt: &totalTilt)
+    let leftSubtreeSum: Int = calcSumOfTreeAndAccumulateTotalTilt(
+      root: root.left, totalTilt: &totalTilt)
+    let rightSubtreeSum: Int = calcSumOfTreeAndAccumulateTotalTilt(
+      root: root.right, totalTilt: &totalTilt)
 
-    totalTilt += abs(leftTreeSum - rightTreeSum)
+    totalTilt += abs(leftSubtreeSum - rightSubtreeSum)
 
-    return root.val + leftTreeSum + rightTreeSum
+    return root.val + leftSubtreeSum + rightSubtreeSum
   }
 }
