@@ -12,19 +12,28 @@
 ///     }
 /// }
 class Solution {
+  /// Returns the sum of all node tilts in a binary tree.
+  ///
+  /// - Parameters:
+  ///   - root: The root node of a binary tree.
+  /// - Returns: The sum of all node tilts in a binary tree.
   func findTilt(_ root: TreeNode?) -> Int {
     var totalTilt: Int = 0
-    calcSumOfTreeAndAccumulateTotalTilt(root: root, totalTilt: &totalTilt)
+    calcTiltWithSubtreeSum(root: root, totalTilt: &totalTilt)
     return totalTilt
   }
 
-  private func calcSumOfTreeAndAccumulateTotalTilt(root: TreeNode?, totalTilt: inout Int) -> Int {
+  /// Returns the sum of all node values in a binary tree while accumulating the total tilt.
+  ///
+  /// - Parameters:
+  ///   - root: The root node of a binary tree.
+  ///   - totalTilt: The cumulative tilt value of visited nodes.
+  /// - Returns: The sum of all node values in a binary tree.
+  private func calcTiltWithSubtreeSum(root: TreeNode?, totalTilt: inout Int) -> Int {
     guard let root = root else { return 0 }
 
-    let leftSubtreeSum: Int = calcSumOfTreeAndAccumulateTotalTilt(
-      root: root.left, totalTilt: &totalTilt)
-    let rightSubtreeSum: Int = calcSumOfTreeAndAccumulateTotalTilt(
-      root: root.right, totalTilt: &totalTilt)
+    let leftSubtreeSum: Int = calcTiltWithSubtreeSum(root: root.left, totalTilt: &totalTilt)
+    let rightSubtreeSum: Int = calcTiltWithSubtreeSum(root: root.right, totalTilt: &totalTilt)
 
     totalTilt += abs(leftSubtreeSum - rightSubtreeSum)
 
