@@ -1,16 +1,5 @@
-/// Definition for a binary tree node.
-/// public class TreeNode {
-///     public var val: Int
-///     public var left: TreeNode?
-///     public var right: TreeNode?
-///     public init() { self.val = 0; self.left = nil; self.right = nil; }
-///     public init(_ val: Int) { self.val = val; self.left = nil; self.right = nil; }
-///     public init(_ val: Int, _ left: TreeNode?, _ right: TreeNode?) {
-///         self.val = val
-///         self.left = left
-///         self.right = right
-///     }
-/// }
+import XCTest
+
 class Solution {
   /// Returns the sum of all node tilts in a binary tree.
   ///
@@ -38,5 +27,54 @@ class Solution {
     totalTilt += abs(leftSubtreeSum - rightSubtreeSum)
 
     return root.val + leftSubtreeSum + rightSubtreeSum
+  }
+}
+
+class SolutionTests: XCTestCase {
+
+  var solution: Solution!
+
+  override func setUp() {
+    super.setUp()
+    solution = Solution()
+  }
+
+  private func convertNumsArrayToTree(nums: [Int?], nodePos: Int) -> TreeNode? {
+    guard nodePos < nums.count, let curNodeVal = nums[nodePos] else { return nil }
+
+    let rootNode: TreeNode = TreeNode(curNodeVal)
+    rootNode.left = convertNumsArrayToTree(nums: nums, nodePos: nodePos * 2 + 1)
+    rootNode.right = convertNumsArrayToTree(nums: nums, nodePos: nodePos * 2 + 2)
+
+    return rootNode
+  }
+
+  func testFindTilt_WhenGivenNilValue() {
+    let root: TreeNode? = nil
+    let tiltVal: Int = solution.findTilt(root)
+
+    XCTAssertEqual(
+      tiltVal, 0,
+      "The tilt value should be 0 for an empty tree, but it was calculated as \(tiltVal).")
+  }
+
+  func testFindTilt_WhenGivenTreeWithSingleNode() {
+    let nums: [Int?] = [1]
+    let root = convertNumsArrayToTree(nums: nums, nodePos: 0)
+    let tiltVal = solution.findTilt(root)
+
+    XCTAssertEqual(
+      tiltVal, 0,
+      "The tilt value for a single-node tree should be 0, but it was calculated as \(tiltVal).")
+  }
+
+  func testFindTilt_WhenBinaryTreeIsDeep() {
+    let nums: [Int?] = [4, 2, 9, 3, 5, nil, 7]
+    let root: TreeNode? = convertNumsArrayToTree(nums: nums, nodePos: 0)
+    let tiltVal: Int = solution.findTilt(root)
+
+    XCTAssertEqual(
+      tiltVal, 15, "The tilt value should be calculated as 15, but it was calculated as \(tiltVal)."
+    )
   }
 }
