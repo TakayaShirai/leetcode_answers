@@ -1,114 +1,55 @@
 class Solution {
   func checkInclusion(_ s1: String, _ s2: String) -> Bool {
-    if s1.count > s2.count {
-      return false
-    }
+    guard s2.count >= s1.count else { return false }
 
-    var arrayS1 = Array(s1)
-    var arrayS2 = Array(s2)
+    var curCharCntMap: [Character: Int] = createCharCntMap(of: s1)
 
-    var seenS1: [Character: Int] = [:]
-    var seenS2: [Character: Int] = [:]
+    for (idx, char) in s2.enumerated() {
+      if idx == s1.count - 1 {
+        break
+      }
 
-    for char in arrayS1 {
-      seenS1[char, default: 0] += 1
-    }
+      curCharCntMap[char, default: 0] -= 1
 
-    var left: Int = 0
-    var right: Int = -1
-
-    while (right - left + 1) < arrayS1.count {
-      right += 1
-      if let seen = seenS1[arrayS2[right]] {
-        seenS2[arrayS2[right], default: 0] += 1
+      if curCharCntMap[char] == 0 {
+        curCharCntMap.removeValue(forKey: char)
       }
     }
 
-    while right < arrayS2.count {
-      if seenS1 == seenS2 {
+    let sChars: [Character] = Array(s2)
+
+    for leftIdx in 0..<(s2.count - s1.count + 1) {
+      let rightIdx: Int = leftIdx + s1.count - 1
+      let rightChar: Character = sChars[rightIdx]
+      let leftChar: Character = sChars[leftIdx]
+
+      curCharCntMap[rightChar, default: 0] -= 1
+
+      if curCharCntMap[rightChar] == 0 {
+        curCharCntMap.removeValue(forKey: rightChar)
+      }
+
+      if curCharCntMap.count == 0 {
         return true
       }
 
-      if let seen = seenS2[arrayS2[left]] {
-        seenS2[arrayS2[left]]! -= 1
-      }
+      curCharCntMap[leftChar, default: 0] += 1
 
-      left += 1
-      right += 1
-
-      if right >= arrayS2.count {
-        return false
-      }
-
-      if let seen = seenS1[arrayS2[right]] {
-        seenS2[arrayS2[right], default: 0] += 1
+      if curCharCntMap[leftChar] == 0 {
+        curCharCntMap.removeValue(forKey: leftChar)
       }
     }
 
     return false
   }
+
+  private func createCharCntMap(of str: String) -> [Character: Int] {
+    var charCntMap: [Character: Int] = [:]
+
+    for char in str {
+      charCntMap[char, default: 0] += 1
+    }
+
+    return charCntMap
+  }
 }
-
-// TLE in Swift
-// class Solution {
-//     func checkInclusion(_ s1: String, _ s2: String) -> Bool {
-//         if s1.count > s2.count {
-//             return false
-//         }
-
-//         var arrayS1 = Array(s1)
-//         var arrayS2 = Array(s2)
-
-//         var seenS1 = Array(repeating: 0, count: 26)
-//         var seenS2 = Array(repeating: 0, count: 26)
-
-//         let aAsciiValue = Int(Character("a").asciiValue!)
-
-//         for i in 0..<arrayS1.count {
-//             seenS1[Int(arrayS1[i].asciiValue!) - aAsciiValue] += 1
-//             seenS2[Int(arrayS2[i].asciiValue!) - aAsciiValue] += 1
-//         }
-
-//         var matches = 0
-
-//         for i in 0..<26 {
-//             if seenS1[i] == seenS2[i] {
-//                 matches += 1
-//             }
-//         }
-
-//         var left = 0
-//         var right = s1.count - 1
-
-//         while right < s2.count {
-//             if matches == 26 {
-//                 return true
-//             }
-
-//             let leftIndex = Int(arrayS2[left].asciiValue!) - aAsciiValue
-//             seenS2[leftIndex] -= 1
-//             if seenS1[leftIndex] == seenS2[leftIndex] {
-//                 matches += 1
-//             } else if seenS1[leftIndex] - 1 == seenS2[leftIndex] {
-//                 matches -= 1
-//             }
-
-//             left += 1
-//             right += 1
-
-//             if right >= s2.count {
-//                 return false
-//             }
-
-//             let rightIndex = Int(arrayS2[right].asciiValue!) - aAsciiValue
-//             seenS2[rightIndex] += 1
-//             if seenS1[rightIndex] == seenS2[rightIndex] {
-//                 matches += 1
-//             } else if seenS1[rightIndex] + 1 == seenS2[rightIndex] {
-//                 matches -= 1
-//             }
-//         }
-
-//         return false
-//     }
-// }
