@@ -1,47 +1,32 @@
+import HeapModule
+
 class KthLargest {
-  private var k: Int
-  private var topKNums: [Int]
+
+  var heap: Heap<Int>
+  let k: Int
 
   init(_ k: Int, _ nums: [Int]) {
     self.k = k
-    topKNums = nums
-    topKNums.sort()
+    self.heap = []
 
-    while topKNums.count > k {
-      topKNums.removeFirst()
+    for num in nums {
+      heap.insert(num)
+
+      if heap.count > k {
+        heap.removeMin()
+      }
     }
   }
 
   func add(_ val: Int) -> Int {
-    if topKNums.count < k {
-      insert(val)
-    } else if topKNums.first! < val {
-      topKNums.removeFirst()
-      insert(val)
+    heap.insert(val)
+
+    if heap.count > k {
+      heap.removeMin()
+
     }
 
-    return topKNums.first!
-  }
-
-  func insert(_ val: Int) {
-    var left: Int = 0
-    var right: Int = topKNums.count - 1
-    var mid: Int = (left + right) / 2
-
-    while left <= right {
-      mid = (left + right) / 2
-
-      if topKNums[mid] == val {
-        left = mid
-        break
-      } else if topKNums[mid] < val {
-        left = mid + 1
-      } else {
-        right = mid - 1
-      }
-    }
-
-    topKNums.insert(val, at: left)
+    return heap.min!
   }
 }
 
