@@ -16,7 +16,8 @@ class Solution {
       }
     }
 
-    return shortestCompWord ?? ""
+    // Safe to unwrap since it is guaranteed an answer exists.
+    return shortestCompWord!
   }
 
   /// Returns a boolean value indicating whether the given word is a completing word of the given string.
@@ -30,8 +31,9 @@ class Solution {
     let targetCharCntMap: [Character: Int] = createAlphaCharCntMap(of: target.lowercased())
 
     for (char, requiredCnt) in targetCharCntMap {
-      guard let availableCnt = wordCharCntMap[char] else { return false }
-      guard availableCnt >= requiredCnt else { return false }
+      guard let availableCnt = wordCharCntMap[char], availableCnt >= requiredCnt else {
+        return false
+      }
     }
 
     return true
