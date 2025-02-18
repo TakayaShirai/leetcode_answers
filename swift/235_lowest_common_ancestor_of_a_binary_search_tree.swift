@@ -15,18 +15,18 @@
 class Solution {
   func lowestCommonAncestor(_ root: TreeNode?, _ p: TreeNode?, _ q: TreeNode?) -> TreeNode? {
     guard let root = root, let p = p, let q = q else { return nil }
-    var largerNode: TreeNode = p.val > q.val ? p : q
-    var smallerNode: TreeNode = p.val < q.val ? p : q
 
-    var cur: TreeNode? = root
+    let smallerVal: Int = min(p.val, q.val)
+    let largerVal: Int = max(p.val, q.val)
+    var curNode: TreeNode? = root
 
-    while cur != nil {
-      if smallerNode.val <= cur!.val && cur!.val <= largerNode.val {
-        return cur
-      } else if cur!.val > largerNode.val {
-        cur = cur!.left
+    while curNode != nil {
+      if curNode!.val < smallerVal {
+        curNode = curNode!.right
+      } else if curNode!.val > largerVal {
+        curNode = curNode!.left
       } else {
-        cur = cur!.right
+        return curNode
       }
     }
 
