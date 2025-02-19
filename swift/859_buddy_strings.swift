@@ -21,6 +21,6 @@ class Solution {
       }
     }
 
-    return diffChars.count == 2 && diffChars[0] == diffChars[1].reversed()
+    return diffChars.count == requiredSwapCnt && diffChars[0] == diffChars[1].reversed()
   }
 }
