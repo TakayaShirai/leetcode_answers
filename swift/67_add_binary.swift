@@ -1,32 +1,23 @@
 class Solution {
   func addBinary(_ a: String, _ b: String) -> String {
-    let arrayOfA = Array(a)
-    let arrayOfB = Array(b)
+    let reversedA: [Character] = Array(a.reversed())
+    let reversedB: [Character] = Array(b.reversed())
+    var curIdx: Int = 0
+    var carry: Int = 0
+    var addRes: String = ""
 
-    var curAIndex: Int = a.count - 1
-    var curBIndex: Int = b.count - 1
-    var carrier: Int = 0
+    while curIdx < a.count || curIdx < b.count || carry == 1 {
+      let bitA: Int = curIdx < a.count ? Int(String(reversedA[curIdx]))! : 0
+      let bitB: Int = curIdx < b.count ? Int(String(reversedB[curIdx]))! : 0
+      let sum: Int = bitA + bitB + carry
 
-    var ABSum: [Character] = []
+      let curDigit: Int = sum % 2
+      carry = sum / 2
+      addRes += String(curDigit)
 
-    while curAIndex >= 0 || curBIndex >= 0 || carrier == 1 {
-      let aDigit = curAIndex >= 0 ? arrayOfA[curAIndex] : "0"
-      let bDigit = curBIndex >= 0 ? arrayOfB[curBIndex] : "0"
-
-      let sum = Int(String(aDigit))! + Int(String(bDigit))! + carrier
-
-      if sum >= 2 {
-        ABSum.append(Character(String(sum % 2)))
-        carrier = 1
-      } else {
-        ABSum.append(Character(String(sum)))
-        carrier = 0
-      }
-
-      curAIndex -= 1
-      curBIndex -= 1
+      curIdx += 1
     }
 
-    return String(ABSum.reversed())
+    return String(addRes.reversed())
   }
 }
