@@ -1,55 +1,41 @@
 class MyQueue {
-  var pushStack: [Int]
+
   var popStack: [Int]
+  var pushStack: [Int]
 
   init() {
-    self.pushStack = []
     self.popStack = []
+    self.pushStack = []
   }
 
   func push(_ x: Int) {
-    if !popStack.isEmpty {
-      movePopToPush()
-    }
-
     pushStack.append(x)
   }
 
   func pop() -> Int {
-    guard !empty() else { return -1 }
-
-    if !pushStack.isEmpty {
-      movePushToPop()
+    if popStack.isEmpty {
+      moveVals(from: &pushStack, to: &popStack)
     }
 
     return popStack.removeLast()
   }
 
   func peek() -> Int {
-    guard !empty() else { return -1 }
-
-    if !popStack.isEmpty {
-      return popStack[popStack.count - 1]
-    } else {
-      return pushStack[0]
+    if popStack.isEmpty {
+      moveVals(from: &pushStack, to: &popStack)
     }
+
+    return popStack.last!
   }
 
   func empty() -> Bool {
-    return pushStack.isEmpty && popStack.isEmpty
+    return popStack.isEmpty && pushStack.isEmpty
   }
 
-  private func movePopToPush() {
-    while !popStack.isEmpty {
-      let poppedNum = popStack.removeLast()
-      pushStack.append(poppedNum)
-    }
-  }
-
-  private func movePushToPop() {
-    while !pushStack.isEmpty {
-      let poppedNum = pushStack.removeLast()
-      popStack.append(poppedNum)
+  private func moveVals(from stack1: inout [Int], to stack2: inout [Int]) {
+    while !stack1.isEmpty {
+      let poppedVal: Int = stack1.removeLast()
+      stack2.append(poppedVal)
     }
   }
 }
