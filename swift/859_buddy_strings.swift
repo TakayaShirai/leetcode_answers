@@ -2,7 +2,7 @@ import XCTest
 
 class Solution {
   /// Return a boolean value indicating whether the two given strings can become identical
-  /// by swapping two charactes.
+  /// by swapping two characters.
   ///
   /// - Parameters:
   ///   - s: The first input string.
