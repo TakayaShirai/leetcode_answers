@@ -1,33 +1,29 @@
 class Solution {
   func evalRPN(_ tokens: [String]) -> Int {
-    var numStack: [Int] = []
+    var numsStack: [Int] = []
 
     for token in tokens {
-      if token == "+"
-        || token == "-"
-        || token == "*"
-        || token == "/"
-      {
-        var numOne: Int = numStack.popLast()!
-        var numTwo: Int = numStack.popLast()!
-
+      if let num = Int(token) {
+        numsStack.append(num)
+      } else {
+        guard numsStack.count >= 2 else { return -1 }
+        let rightNum: Int = numsStack.removeLast()
+        let leftNum: Int = numsStack.removeLast()
         switch token {
         case "+":
-          numStack.append(numTwo + numOne)
+          numsStack.append(leftNum + rightNum)
         case "-":
-          numStack.append(numTwo - numOne)
-        case "*":
-          numStack.append(numTwo * numOne)
+          numsStack.append(leftNum - rightNum)
         case "/":
-          numStack.append(numTwo / numOne)
+          numsStack.append(leftNum / rightNum)
+        case "*":
+          numsStack.append(leftNum * rightNum)
         default:
-          break
+          return -1
         }
-      } else {
-        numStack.append(Int(token)!)
       }
     }
 
-    return numStack[0]
+    return numsStack.removeLast()
   }
 }
