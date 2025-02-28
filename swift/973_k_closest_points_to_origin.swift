@@ -1,19 +1,39 @@
+import HeapModule
+
+struct Point: Comparable {
+  var pos: [Int]
+  var disFromOrigin: Double {
+    sqrt(Double(pos[0]) * Double(pos[0]) + Double(pos[1]) * Double(pos[1]))
+  }
+
+  static func < (lhs: Point, rhs: Point) -> Bool {
+    return lhs.disFromOrigin < rhs.disFromOrigin
+  }
+
+  static func == (lhs: Point, rhs: Point) -> Bool {
+    return lhs.disFromOrigin == rhs.disFromOrigin
+  }
+}
+
 class Solution {
   func kClosest(_ points: [[Int]], _ k: Int) -> [[Int]] {
-    var pointsWithDist: [[Int]] = []
-    var res: [[Int]] = []
+    var kClosestPoints: Heap<Point> = []
 
     for point in points {
-      let dist = (point[0] * point[0] + point[1] * point[1])
-      pointsWithDist.append([dist, point[0], point[1]])
+      let pointObj = Point(pos: point)
+      kClosestPoints.insert(pointObj)
+      if kClosestPoints.count > k {
+        kClosestPoints.popMax()
+      }
     }
 
-    pointsWithDist.sort { $0[0] < $1[0] }
-
-    for i in 0..<k {
-      res.append([pointsWithDist[i][1], pointsWithDist[i][2]])
+    var resPoints: [[Int]] = []
+    while !kClosestPoints.isEmpty {
+      if let point = kClosestPoints.popMax() {
+        resPoints.append(point.pos)
+      }
     }
 
-    return res
+    return resPoints
   }
 }
