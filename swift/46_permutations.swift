@@ -1,18 +1,22 @@
 class Solution {
   func permute(_ nums: [Int]) -> [[Int]] {
-    guard nums.count > 0 else { return [[]] }
+    var perms: [[Int]] = []
+    var curPerm: [Int] = []
+    backtrack(nums: nums, perms: &perms, curPerm: &curPerm)
+    return perms
+  }
 
-    var perms: [[Int]] = permute(Array(nums[1...]))
-    var resPerms: [[Int]] = []
-
-    for perm in perms {
-      for i in 0...perm.count {
-        var curPerm = perm
-        curPerm.insert(nums[0], at: i)
-        resPerms.append(curPerm)
-      }
+  private func backtrack(nums: [Int], perms: inout [[Int]], curPerm: inout [Int]) {
+    guard curPerm.count != nums.count else {
+      perms.append(Array(curPerm))
+      return
     }
 
-    return resPerms
+    for num in nums {
+      guard !curPerm.contains(num) else { continue }
+      curPerm.append(num)
+      backtrack(nums: nums, perms: &perms, curPerm: &curPerm)
+      curPerm.removeLast()
+    }
   }
 }
