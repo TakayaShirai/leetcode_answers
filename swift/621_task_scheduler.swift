@@ -1,43 +1,60 @@
 import HeapModule
 
+struct Task: Comparable {
+  var type: Character
+  var count: Int
+  var availableTime: Int
+
+  static func == (lhs: Task, rhs: Task) -> Bool {
+    return lhs.count == rhs.count
+  }
+
+  static func < (lhs: Task, rhs: Task) -> Bool {
+    return lhs.count < rhs.count
+  }
+}
+
 class Solution {
   func leastInterval(_ tasks: [Character], _ n: Int) -> Int {
-    var heap: Heap<(Int)> = []
-    var taskCounts = Array(repeating: 0, count: 26)
-    var queue: [(taskCount: Int, availableFrom: Int)] = []
-    var time: Int = 0
+    var curTime: Int = 0
+    var taskCounter: [Character: Int] = createTaskCounter(of: tasks)
+    var taskMaxHeap = Heap<Task>()
+    var queuedTasks: [Task] = []
 
-    for task in tasks {
-      let curTask = alphaToNum(task)
-      taskCounts[curTask] += 1
+    for (taskType, count) in taskCounter {
+      let task = Task(type: taskType, count: count, availableTime: 0)
+      taskMaxHeap.insert(task)
     }
 
-    for taskCount in taskCounts {
-      guard taskCount != 0 else { continue }
-      heap.insert(taskCount)
-    }
+    while !taskMaxHeap.isEmpty || !queuedTasks.isEmpty {
+      if !taskMaxHeap.isEmpty {
+        var curTask: Task = taskMaxHeap.popMax()!
+        curTask.count -= 1
+        curTask.availableTime = curTime + n
 
-    while !heap.isEmpty || !queue.isEmpty {
-      time += 1
-
-      if !heap.isEmpty {
-        let taskCount = heap.popMax()!
-
-        if taskCount > 1 {
-          queue.append((taskCount - 1, time + n))
+        if curTask.count > 0 {
+          queuedTasks.append(curTask)
         }
       }
 
-      if !queue.isEmpty && queue[0].availableFrom == time {
-        heap.insert(queue.removeFirst().taskCount)
+      if !queuedTasks.isEmpty && queuedTasks[0].availableTime <= curTime {
+        let availableTask: Task = queuedTasks.removeFirst()
+        taskMaxHeap.insert(availableTask)
       }
+
+      curTime += 1
     }
 
-    return time
+    return curTime
   }
 
-  func alphaToNum(_ alpha: Character) -> Int {
-    guard let asciiValue = alpha.asciiValue else { return -1 }
-    return Int(asciiValue - Character("A").asciiValue!)
+  private func createTaskCounter(of tasks: [Character]) -> [Character: Int] {
+    var taskCounter: [Character: Int] = [:]
+
+    for task in tasks {
+      taskCounter[task, default: 0] += 1
+    }
+
+    return taskCounter
   }
 }
