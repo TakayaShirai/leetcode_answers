@@ -3,13 +3,19 @@ import XCTest
 class Solution {
   /// Returns the number of beautiful arrangements that can be formed using numbers 1 through the given maximum.
   ///
-  /// - Parameter: maxNum: The maximum number used to create beautiful arrangements.
+  /// A beautiful arrangement is an arrangement that meets either of the following conditions:
+  ///   - The number at position ‘i’ (1-based index) is divisible by `i`.
+  ///   - The position `i` is divisible by the number at that position.
+  ///
+  /// - Parameter maxNum: The maximum number used to create beautiful arrangements.
   /// - Returns: The number of beautiful arrangements that can be formed using numbers 1 through the given maximum.
   func countBeautifulArrangements(maxNum: Int) -> Int {
+    let firstIdx: Int = 1
     var beautifulArrCnt = 0
     var usedNums = Set<Int>()
     findBeautifulArrangements(
-      maxNum: maxNum, curIdx: 1, usedNums: &usedNums, beautifulArrCnt: &beautifulArrCnt)
+      maxNum: maxNum, curIdx: firstIdx /* 1 */, usedNums: &usedNums,
+      beautifulArrCnt: &beautifulArrCnt)
     return beautifulArrCnt
   }
 
@@ -30,6 +36,7 @@ class Solution {
 
     for num in 1...maxNum {
       guard !usedNums.contains(num) else { continue }
+      // Check if the current number satisfies the beautiful arrangement condition.
       guard num % curIdx == 0 || curIdx % num == 0 else { continue }
 
       usedNums.insert(num)
