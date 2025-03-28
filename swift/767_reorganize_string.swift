@@ -1,16 +1,16 @@
 import HeapModule
 import XCTest
 
-/// A struct representing a character and its frequency in a string.
-struct CharFrequency: Comparable {
+/// A struct representing a character and its count in a string.
+struct CharCount: Comparable {
   let char: Character
   let count: Int
 
-  static func == (lhs: CharFrequency, rhs: CharFrequency) -> Bool {
+  static func == (lhs: CharCount, rhs: CharCount) -> Bool {
     return lhs.count == rhs.count
   }
 
-  static func < (lhs: CharFrequency, rhs: CharFrequency) -> Bool {
+  static func < (lhs: CharCount, rhs: CharCount) -> Bool {
     return lhs.count < rhs.count
   }
 }
@@ -19,7 +19,7 @@ class Solution {
 
   /// The enum of errors that can occur while reorganizing a string.
   public enum ReorganizeError: Error {
-    case cannotReorganizeString
+    case cannotReorganizeStringError
   }
 
   /// Reorganizes the given string so that no two adjacent characters are the same.
@@ -28,37 +28,37 @@ class Solution {
   /// - Returns: The result of reorganizing the given string.
   func reorganizeString(_ str: String) -> Result<String, ReorganizeError> {
     let charCounter: [Character: Int] = createCharCounter(of: str)
-    var maxHeap = Heap<CharFrequency>()
+    var maxHeap = Heap<CharCount>()
     let maxAllowedCharCount: Int = (str.count + 1) / 2
 
     for (char, count) in charCounter {
       // Verify that each character's count does not exceed the maximum allowed character count for a valid reorganization.
       guard count <= maxAllowedCharCount else {
-        return .failure(ReorganizeError.cannotReorganizeString)
+        return .failure(ReorganizeError.cannotReorganizeStringError)
       }
-      let charFreq: CharFrequency = CharFrequency(char: char, count: count)
-      maxHeap.insert(charFreq)
+      let charCnt: CharCount = CharCount(char: char, count: count)
+      maxHeap.insert(charCnt)
     }
 
     var reorganizedString: String = ""
-    var prevCharFrequency: CharFrequency? = nil
+    var prevCharCnt: CharCount? = nil
 
     while !maxHeap.isEmpty {
-      let curCharFreq: CharFrequency = maxHeap.popMax()!
-      let curChar: Character = curCharFreq.char
-      let curCnt: Int = curCharFreq.count
+      let curCharCnt: CharCount = maxHeap.popMax()!
+      let curChar: Character = curCharCnt.char
+      let curCnt: Int = curCharCnt.count
 
       reorganizedString.append(curChar)
 
-      if let prev = prevCharFrequency, prev.count > 0 {
+      if let prev = prevCharCnt, prev.count > 0 {
         maxHeap.insert(prev)
       }
 
-      prevCharFrequency = CharFrequency(char: curChar, count: curCnt - 1)
+      prevCharCnt = CharCount(char: curChar, count: curCnt - 1)
     }
 
     guard reorganizedString.count == str.count else {
-      return .failure(ReorganizeError.cannotReorganizeString)
+      return .failure(ReorganizeError.cannotReorganizeStringError)
     }
 
     return .success(reorganizedString)
@@ -115,7 +115,7 @@ class SolutionTest: XCTestCase {
   func testReorganizeStringWhenGivenNonReorganizableString() {
     let nonReorganizableString: String = "aaaabb"
     let reorganizeResult = solution.reorganizeString(nonReorganizableString)
-    let expectedError = Solution.ReorganizeError.cannotReorganizeString
+    let expectedError = Solution.ReorganizeError.cannotReorganizeStringError
 
     switch reorganizeResult {
     case .success(let reorganizedString):
