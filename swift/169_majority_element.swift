@@ -1,21 +1,21 @@
 class Solution {
   func majorityElement(_ nums: [Int]) -> Int {
-    var count: Int = 0
-    var res: Int = nums[0]
+    var curNum: Int = nums[0]
+    var curCnt: Int = 0
 
     for num in nums {
-      if num == res {
-        count += 1
+      if curNum == num {
+        curCnt += 1
       } else {
-        count -= 1
+        curCnt -= 1
 
-        if count == -1 {
-          res = num
-          count += 1
+        if curCnt < 0 {
+          curNum = num
+          curCnt = 0
         }
       }
     }
 
-    return res
+    return curNum
   }
 }
