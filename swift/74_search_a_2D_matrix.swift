@@ -1,42 +1,38 @@
 class Solution {
   func searchMatrix(_ matrix: [[Int]], _ target: Int) -> Bool {
-    var left: Int = 0
-    var right: Int = matrix.count - 1
-    var mid: Int = 0
+    var firstRow: Int = 0
+    var lastRow: Int = matrix.count - 1
 
-    while left <= right {
-      mid = (left + right) / 2
+    while firstRow <= lastRow {
+      let midRow: Int = firstRow + (lastRow - firstRow) / 2
 
-      if matrix[mid][0] == target {
+      if matrix[midRow][0] == target {
         return true
-      } else if matrix[mid][0] > target {
-        right = mid - 1
+      } else if matrix[midRow][0] > target {
+        lastRow = midRow - 1
       } else {
-        left = mid + 1
+        firstRow = midRow + 1
       }
     }
 
-    if left == 0 {
-      return false
-    }
+    guard firstRow > 0 else { return false }
+    let row: Int = firstRow - 1
 
-    var row: Int = left - 1
-    left = 0
-    right = matrix[0].count - 1
+    var firstCol: Int = 0
+    var lastCol: Int = matrix[0].count - 1
 
-    while left <= right {
-      mid = (left + right) / 2
+    while firstCol <= lastCol {
+      let midCol: Int = firstCol + (lastCol - firstCol) / 2
 
-      if matrix[row][mid] == target {
+      if matrix[row][midCol] == target {
         return true
-      } else if matrix[row][mid] > target {
-        right = mid - 1
+      } else if matrix[row][midCol] > target {
+        lastCol = midCol - 1
       } else {
-        left = mid + 1
+        firstCol = midCol + 1
       }
     }
 
     return false
-
   }
 }
