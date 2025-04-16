@@ -1,30 +1,27 @@
 class Solution {
   func canJump(_ nums: [Int]) -> Bool {
-    // Greedy solution
-    var goal = nums.count - 1
+    var curGoal: Int = nums.count - 1
 
-    for i in (0..<nums.count - 1).reversed() {
-      if nums[i] + i >= goal {
-        goal = i
+    for (curIdx, maxJump) in nums.enumerated().reversed() {
+      if maxJump + curIdx >= curGoal {
+        curGoal = curIdx
       }
     }
 
-    return goal == 0 ? true : false
+    return curGoal == 0
 
-    // DP solution
-    //         var dp  = Array(repeating: false, count: nums.count)
+    // var canReachJumpArray: [Bool] = Array(repeating: false, count: nums.count)
+    // canReachJumpArray[nums.count - 1] = true
 
-    //         dp[nums.count-1] = true
+    // for (curIdx, maxJump) in nums.enumerated().reversed() {
+    //   for jump in 0...maxJump {
+    //     guard curIdx + jump < nums.count else { break }
+    //     guard canReachJumpArray[curIdx + jump] else { continue }
+    //     canReachJumpArray[curIdx] = true
+    //     break
+    //   }
+    // }
 
-    //         for i in (0..<nums.count-1).reversed() {
-    //             for jump in (1..<nums[i]+1).reversed() {
-    //                 if jump + i >= nums.count-1 || dp[jump+i] == true {
-    //                     dp[i] = true
-    //                     break
-    //                 }
-    //             }
-    //         }
-
-    //         return dp[0]
+    // return canReachJumpArray[0]
   }
 }
