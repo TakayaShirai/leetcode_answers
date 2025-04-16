@@ -1,17 +1,22 @@
 class Solution {
   func groupAnagrams(_ strs: [String]) -> [[String]] {
-    var anagrams: [[Character: Int]: [String]] = [:]
+    var anagramMap: [[Character: Int]: [String]] = [:]
 
-    for str in strs {
-      var count: [Character: Int] = [:]
-
-      for char in str {
-        count[char, default: 0] += 1
-      }
-
-      anagrams[count, default: []].append(str)
+    for curStr in strs {
+      let curStrCharCounter = createCharCounter(of: curStr)
+      anagramMap[curStrCharCounter, default: []].append(curStr)
     }
 
-    return Array(anagrams.values)
+    return Array(anagramMap.values)
+  }
+
+  private func createCharCounter(of str: String) -> [Character: Int] {
+    var charCounter: [Character: Int] = [:]
+
+    for char in str {
+      charCounter[char, default: 0] += 1
+    }
+
+    return charCounter
   }
 }
