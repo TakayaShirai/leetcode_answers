@@ -1,16 +1,15 @@
 class Solution {
   func maxProfit(_ prices: [Int]) -> Int {
-    var maxProfit: Int = 0
-    var curBuyPrice: Int = prices[0]
+    guard prices.count > 1 else { return 0 }
 
-    for price in prices {
-      if price > curBuyPrice {
-        maxProfit += price - curBuyPrice
-      }
+    var curProfit: Int = 0
 
-      curBuyPrice = price
+    for curIdx in 1..<prices.count {
+      let prevPrice: Int = prices[curIdx - 1]
+      let curPrice: Int = prices[curIdx]
+      curProfit += max(0, curPrice - prevPrice)
     }
 
-    return maxProfit
+    return curProfit
   }
 }
