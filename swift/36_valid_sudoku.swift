@@ -1,27 +1,27 @@
 class Solution {
   func isValidSudoku(_ board: [[Character]]) -> Bool {
-    var colsSet = [Set<Character>](repeating: Set<Character>(), count: 9)
-    var rowsSet = [Set<Character>](repeating: Set<Character>(), count: 9)
-    var squaresSet = [Set<Character>](repeating: Set<Character>(), count: 9)
+    var rowCharsSet: [Set<Character>] = Array(repeating: Set<Character>(), count: 9)
+    var colCharsSet: [Set<Character>] = Array(repeating: Set<Character>(), count: 9)
+    var subBoxCharsSet: [Set<Character>] = Array(repeating: Set<Character>(), count: 9)
+    let nonNumGridChar: Character = "."
 
-    for c in 0..<9 {
-      for r in 0..<9 {
-        if board[c][r] == "." {
-          continue
-        }
+    for row in 0..<board.count {
+      for col in 0..<board[0].count {
+        let curChar: Character = board[row][col]
+        guard curChar != nonNumGridChar else { continue }
 
-        let squareIndex: Int = (r / 3) * 3 + (c / 3)
+        let subBoxIdx: Int = row / 3 + (col / 3) * 3
 
-        if colsSet[c].contains(board[c][r])
-          || rowsSet[r].contains(board[c][r])
-          || squaresSet[squareIndex].contains(board[c][r])
-        {
+        guard
+          !rowCharsSet[row].contains(curChar) && !colCharsSet[col].contains(curChar)
+            && !subBoxCharsSet[subBoxIdx].contains(curChar)
+        else {
           return false
         }
 
-        colsSet[c].insert(board[c][r])
-        rowsSet[r].insert(board[c][r])
-        squaresSet[squareIndex].insert(board[c][r])
+        rowCharsSet[row].insert(curChar)
+        colCharsSet[col].insert(curChar)
+        subBoxCharsSet[subBoxIdx].insert(curChar)
       }
     }
 
