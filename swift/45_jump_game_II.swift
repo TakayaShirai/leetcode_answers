@@ -1,40 +1,41 @@
 class Solution {
   func jump(_ nums: [Int]) -> Int {
-    // Greedy Solution
-    var left: Int = 0
-    var right: Int = 0
-    var res: Int = 0
+    guard nums.count > 1 else { return 0 }
 
-    while right < nums.count - 1 {
-      var farthest: Int = left
+    // Greedy
+    var searchStartIdx: Int = 0
+    var curMaxReach: Int = 0
+    var requiredJumps: Int = 0
 
-      for i in left..<right + 1 {
-        farthest = max(farthest, i + nums[i])
+    while curMaxReach < nums.count - 1 {
+      var maxReachCandidate: Int = searchStartIdx
+
+      for curIdx in searchStartIdx...curMaxReach {
+        maxReachCandidate = max(maxReachCandidate, nums[curIdx] + curIdx)
       }
 
-      left = right + 1
-      right = farthest
-      res += 1
+      searchStartIdx = curMaxReach + 1
+      curMaxReach = maxReachCandidate
+      requiredJumps += 1
     }
 
-    return res
+    return requiredJumps
 
-    // DP solution
-    //         var dp = Array(repeating: 100000, count: nums.count)
+    // DP
+    // var minRequiredJumps: [Int] = Array(repeating: nums.count, count: nums.count)
+    // minRequiredJumps[0] = 0
 
-    //         dp[nums.count-1] = 0
+    // for curIdx in 0..<nums.count {
+    //   let maxJump: Int = nums[curIdx]
 
-    //         for i in (0..<nums.count-1).reversed() {
-    //             for jump in (1..<nums[i]+1).reversed() {
-    //                 if jump + i >= nums.count - 1 {
-    //                     dp[i] = 1
-    //                     break
-    //                 } else {
-    //                     dp[i] = min(dp[i], dp[jump + i] + 1)
-    //                 }
-    //             }
-    //         }
+    //   guard maxJump > 0 else { continue }
 
-    //         return dp[0]
+    //   for jump in 1...maxJump {
+    //     guard curIdx + jump < nums.count else { break }
+    //     minRequiredJumps[curIdx + jump] = min(minRequiredJumps[curIdx + jump], minRequiredJumps[curIdx] + 1)
+    //   }
+    // }
+
+    // return minRequiredJumps[nums.count - 1]
   }
 }
