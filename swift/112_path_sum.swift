@@ -15,11 +15,11 @@ class Solution {
   func hasPathSum(_ root: TreeNode?, _ targetSum: Int) -> Bool {
     guard let root = root else { return false }
 
-    if root.left == nil && root.right == nil {
-      return root.val == targetSum
+    if root.left == nil && root.right == nil && root.val == targetSum {
+      return true
     }
 
-    let remainingSum = targetSum - root.val
-    return hasPathSum(root.left, remainingSum) || hasPathSum(root.right, remainingSum)
+    return hasPathSum(root.left, targetSum - root.val)
+      || hasPathSum(root.right, targetSum - root.val)
   }
 }
