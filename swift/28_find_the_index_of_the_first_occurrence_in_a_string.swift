@@ -1,29 +1,19 @@
 class Solution {
   func strStr(_ haystack: String, _ needle: String) -> Int {
-    guard needle.count <= haystack.count else { return -1 }
+    guard !needle.isEmpty else { return 0 }
+    guard haystack.count >= needle.count else { return -1 }
 
-    let haystackArray = Array(haystack)
-    let needleArray = Array(needle)
+    let needleLen = needle.count
+    let haystackLen = haystack.count
 
-    for haystackIdx in 0...(haystack.count - needle.count) {
-      if isNeedleAtIndex(haystackIdx, haystackArray, needleArray) {
-        return haystackIdx
-      }
+    for curIdx in 0...(haystackLen - needleLen) {
+      let startIdx: String.Index = haystack.index(haystack.startIndex, offsetBy: curIdx)
+      let endIdx: String.Index = haystack.index(startIdx, offsetBy: needleLen)
+      let substring = haystack[startIdx..<endIdx]
+
+      guard needle != substring else { return curIdx }
     }
 
     return -1
-  }
-
-  private func isNeedleAtIndex(
-    _ haystackIdx: Int,
-    _ haystackArray: [Character],
-    _ needleArray: [Character]
-  ) -> Bool {
-    for needleIdx in 0..<needleArray.count {
-      if haystackArray[haystackIdx + needleIdx] != needleArray[needleIdx] {
-        return false
-      }
-    }
-    return true
   }
 }
