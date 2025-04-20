@@ -1,15 +1,13 @@
 class Solution {
   func rob(_ nums: [Int]) -> Int {
-    var previousMax = 0
-    var currentMax = 0
+    var maxProfits: [Int] = Array(repeating: 0, count: nums.count)
 
-    // [previousMax, currentMax, num, ...]
-    for num in nums {
-      let temp = max(num + previousMax, currentMax)
-      previousMax = currentMax
-      currentMax = temp
+    for (curIdx, num) in nums.enumerated() {
+      let profitTwoHousesBack: Int = curIdx - 2 >= 0 ? maxProfits[curIdx - 2] : 0
+      let profitOneHousesBack: Int = curIdx - 1 >= 0 ? maxProfits[curIdx - 1] : 0
+      maxProfits[curIdx] = max(nums[curIdx] + profitTwoHousesBack, profitOneHousesBack)
     }
 
-    return currentMax
+    return maxProfits[nums.count - 1]
   }
 }
