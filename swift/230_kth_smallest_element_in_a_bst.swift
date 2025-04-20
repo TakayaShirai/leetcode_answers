@@ -13,23 +13,23 @@
 /// }
 class Solution {
   func kthSmallest(_ root: TreeNode?, _ k: Int) -> Int {
-    var kthMinVal: Int = 0
-    var curIdx: Int = 1
-    dfs(node: root, curIdx: &curIdx, kthMinVal: &kthMinVal, k: k)
-    return kthMinVal
+    var curIdx: Int = 0
+    var kthSmallestNum: Int = 0
+    helperInorderDfs(curIdx: &curIdx, nullableNode: root, k: k, kthSmallest: &kthSmallestNum)
+    return kthSmallestNum
   }
 
-  private func dfs(node: TreeNode?, curIdx: inout Int, kthMinVal: inout Int, k: Int) {
-    guard let node = node else { return }
+  private func helperInorderDfs(
+    curIdx: inout Int, nullableNode: TreeNode?, k: Int, kthSmallest: inout Int
+  ) {
+    guard let curNode = nullableNode else { return }
 
-    dfs(node: node.left, curIdx: &curIdx, kthMinVal: &kthMinVal, k: k)
-
-    if curIdx == k {
-      kthMinVal = node.val
-    }
-
+    helperInorderDfs(curIdx: &curIdx, nullableNode: curNode.left, k: k, kthSmallest: &kthSmallest)
     curIdx += 1
-
-    dfs(node: node.right, curIdx: &curIdx, kthMinVal: &kthMinVal, k: k)
+    guard curIdx != k else {
+      kthSmallest = curNode.val
+      return
+    }
+    helperInorderDfs(curIdx: &curIdx, nullableNode: curNode.right, k: k, kthSmallest: &kthSmallest)
   }
 }
