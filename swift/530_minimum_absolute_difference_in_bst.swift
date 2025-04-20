@@ -13,23 +13,20 @@
 /// }
 class Solution {
   func getMinimumDifference(_ root: TreeNode?) -> Int {
-    guard let root = root else { return -1 }
     var minDiff: Int = Int.max
-    var prevVal: Int? = nil
-    dfs(root, prevVal: &prevVal, minDiff: &minDiff)
+    var prevVal: Int = Int.max
+    inorderDFS(nullableNode: root, minDiff: &minDiff, prevVal: &prevVal)
     return minDiff
   }
 
-  private func dfs(_ node: TreeNode?, prevVal: inout Int?, minDiff: inout Int) {
-    guard let node = node else { return }
+  private func inorderDFS(nullableNode: TreeNode?, minDiff: inout Int, prevVal: inout Int) {
+    guard let curNode = nullableNode else { return }
 
-    dfs(node.left, prevVal: &prevVal, minDiff: &minDiff)
+    inorderDFS(nullableNode: curNode.left, minDiff: &minDiff, prevVal: &prevVal)
 
-    if let prevVal = prevVal {
-      minDiff = min(minDiff, abs(prevVal - node.val))
-    }
-    prevVal = node.val
+    minDiff = min(minDiff, abs(curNode.val - prevVal))
+    prevVal = curNode.val
 
-    dfs(node.right, prevVal: &prevVal, minDiff: &minDiff)
+    inorderDFS(nullableNode: curNode.right, minDiff: &minDiff, prevVal: &prevVal)
   }
 }
