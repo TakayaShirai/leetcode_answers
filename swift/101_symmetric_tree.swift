@@ -13,22 +13,15 @@
 /// }
 class Solution {
   func isSymmetric(_ root: TreeNode?) -> Bool {
-    func dfs(_ left: TreeNode?, _ right: TreeNode?) -> Bool {
-      if left == nil && right == nil {
-        return true
-      }
+    guard let strongRoot = root else { return true }
+    return isMirror(strongRoot.left, strongRoot.right)
+  }
 
-      if left == nil || right == nil {
-        return false
-      }
-
-      if left!.val == right!.val && dfs(left!.left, right!.right) && dfs(left!.right, right!.left) {
-        return true
-      }
-
-      return false
-    }
-
-    return dfs(root?.left, root?.right)
+  private func isMirror(_ left: TreeNode?, _ right: TreeNode?) -> Bool {
+    guard !(left == nil && right == nil) else { return true }
+    guard let strongLeft = left, let strongRight = right else { return false }
+    return strongLeft.val == strongRight.val
+      && isMirror(strongLeft.right, strongRight.left)
+      && isMirror(strongLeft.left, strongRight.right)
   }
 }
