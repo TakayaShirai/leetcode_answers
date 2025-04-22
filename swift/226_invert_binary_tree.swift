@@ -13,44 +13,14 @@
 /// }
 class Solution {
   func invertTree(_ root: TreeNode?) -> TreeNode? {
-    // return bfsInvertTree(root)
-    return dfsInvertTree(node: root)
-  }
+    guard let strongRoot = root else { return nil }
 
-  func dfsInvertTree(node: TreeNode?) -> TreeNode? {
-    guard let node = node else { return nil }
+    let invertedLeft: TreeNode? = invertTree(strongRoot.left)
+    let invertedRight: TreeNode? = invertTree(strongRoot.right)
 
-    let tmp: TreeNode? = node.left
-    node.left = dfsInvertTree(node: node.right)
-    node.right = dfsInvertTree(node: tmp)
+    strongRoot.left = invertedRight
+    strongRoot.right = invertedLeft
 
-    return node
-  }
-
-  func bfsInvertTree(_ root: TreeNode?) -> TreeNode? {
-    var cur: TreeNode? = root
-    var queue: [TreeNode] = []
-
-    if cur != nil {
-      queue.append(cur!)
-    }
-
-    while !queue.isEmpty {
-      cur = queue.removeFirst()
-
-      var tmpLeft = cur!.left
-      cur!.left = cur!.right
-      cur!.right = tmpLeft
-
-      if cur!.left != nil {
-        queue.append(cur!.left!)
-      }
-
-      if cur!.right != nil {
-        queue.append(cur!.right!)
-      }
-    }
-
-    return root
+    return strongRoot
   }
 }
