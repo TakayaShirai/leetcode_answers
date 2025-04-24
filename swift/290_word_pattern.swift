@@ -1,53 +1,25 @@
 class Solution {
   func wordPattern(_ pattern: String, _ s: String) -> Bool {
-    let arrayPattern = Array(pattern)
-    let words: [String] = s.components(separatedBy: " ")
+    var patternToSMap: [Character: String] = [:]
+    var sToPatternMap: [String: Character] = [:]
 
-    guard arrayPattern.count == words.count else { return false }
+    let splittedS: [String] = s.components(separatedBy: " ")
 
-    var patternToWord: [Character: String] = [:]
-    var wordToPattern: [String: Character] = [:]
+    guard splittedS.count == pattern.count else { return false }
 
-    for i in 0..<pattern.count {
-      let curPattern = arrayPattern[i]
-      let curWord = words[i]
-
-      if !isUniquePatternToWord(curPattern, curWord) {
-        return false
+    for (char, str) in zip(pattern, splittedS) {
+      if let mappedStr = patternToSMap[char] {
+        guard mappedStr == str else { return false }
       }
 
-      if !isUniqueWordToPattern(curPattern, curWord) {
-        return false
+      if let mappedPattern = sToPatternMap[str] {
+        guard mappedPattern == char else { return false }
       }
 
-      updateSets(curPattern, curWord)
+      patternToSMap[char] = str
+      sToPatternMap[str] = char
     }
 
     return true
-
-    func isUniquePatternToWord(_ pattern: Character, _ word: String) -> Bool {
-      if let mappedWord = patternToWord[pattern] {
-        if mappedWord != word {
-          return false
-        }
-      }
-
-      return true
-    }
-
-    func isUniqueWordToPattern(_ pattern: Character, _ word: String) -> Bool {
-      if let mappedPattern = wordToPattern[word] {
-        if mappedPattern != pattern {
-          return false
-        }
-      }
-
-      return true
-    }
-
-    func updateSets(_ pattern: Character, _ word: String) {
-      patternToWord[pattern] = word
-      wordToPattern[word] = pattern
-    }
   }
 }
