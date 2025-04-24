@@ -1,21 +1,27 @@
 class Solution {
   func canCompleteCircuit(_ gas: [Int], _ cost: [Int]) -> Int {
-    if gas.reduce(0, +) < cost.reduce(0, +) {
-      return -1
-    }
+    guard gas.total >= cost.total else { return -1 }
+    var curTotalGas: Int = 0
+    var startIdx: Int = 0
 
-    var total: Int = 0
-    var res: Int = 0
+    for (curIdx, curGas) in gas.enumerated() {
+      curTotalGas += curGas
 
-    for i in 0..<gas.count {
-      total += gas[i] - cost[i]
-
-      if total < 0 {
-        total = 0
-        res = i + 1
+      guard curTotalGas >= cost[curIdx] else {
+        curTotalGas = 0
+        startIdx = curIdx + 1
+        continue
       }
+
+      curTotalGas -= cost[curIdx]
     }
 
-    return res
+    return startIdx
+  }
+}
+
+extension Array where Element == Int {
+  var total: Int {
+    self.reduce(0, +)
   }
 }
