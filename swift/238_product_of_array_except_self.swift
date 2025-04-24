@@ -1,52 +1,23 @@
 class Solution {
   func productExceptSelf(_ nums: [Int]) -> [Int] {
-    var tmp: Int = 1
-    var res: [Int] = []
+    var productArray: [Int] = Array(repeating: 1, count: nums.count)
 
-    for num in nums {
-      res.append(tmp)
-      tmp *= num
+    // Multiply elements to the left of current index
+    var leftProduct: Int = nums[0]
+
+    for curIdx in 1..<nums.count {
+      productArray[curIdx] *= leftProduct
+      leftProduct *= nums[curIdx]
     }
 
-    tmp = 1
+    // Multiply elements to the right of current index
+    var rightProduct: Int = nums[nums.count - 1]
 
-    for i in (0..<nums.count).reversed() {
-      res[i] *= tmp
-      tmp *= nums[i]
+    for curIdx in (0..<nums.count - 1).reversed() {
+      productArray[curIdx] *= rightProduct
+      rightProduct *= nums[curIdx]
     }
 
-    return res
-
-    //         var res: [Int] = []
-    //         var hashT: [Int : Int] = [:]
-    //         var totalProduct: Int = 1
-
-    //         for i in 0..<nums.count {
-    //             if nums[i] == 0 {
-    //                 hashT[i] = 1
-    //             } else {
-    //                 totalProduct *= nums[i]
-    //             }
-    //         }
-
-    //         if hashT.count >= 2 {
-    //             for i in 0..<nums.count {
-    //                 res.append(0)
-    //             }
-    //             return res
-    //         } else if hashT.count == 0 {
-    //             for i in 0..<nums.count {
-    //                 res.append(totalProduct / nums[i])
-    //             }
-    //         } else {
-    //             for i in 0..<nums.count {
-    //                 if let _ = hashT[i] {
-    //                     res.append(totalProduct)
-    //                 } else {
-    //                     res.append(0)
-    //                 }
-    //             }
-    //         }
-    //         return res
+    return productArray
   }
 }
