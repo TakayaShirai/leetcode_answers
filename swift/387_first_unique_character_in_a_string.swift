@@ -1,22 +1,23 @@
 class Solution {
-  /// firstUniqChar returns the index of first non-repeting character in a given string
   func firstUniqChar(_ s: String) -> Int {
-    var hashT: [Character: Int] = [:]
+    let charCounter: [Character: Int] = createCounter(of: s)
 
-    for (index, char) in s.enumerated() {
-      if let _ = hashT[char] {
-        hashT[char] = -1
-      } else {
-        hashT[char] = index
-      }
-    }
-
-    for value in hashT.values.sorted() {
-      if value != -1 {
-        return value
+    for (curIdx, char) in s.enumerated() {
+      guard let count = charCounter[char], count != 1 else {
+        return curIdx
       }
     }
 
     return -1
+  }
+
+  private func createCounter(of str: String) -> [Character: Int] {
+    var counter: [Character: Int] = [:]
+
+    for char in str {
+      counter[char, default: 0] += 1
+    }
+
+    return counter
   }
 }
