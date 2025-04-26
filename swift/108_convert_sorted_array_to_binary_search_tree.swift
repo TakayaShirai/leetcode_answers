@@ -13,20 +13,18 @@
 /// }
 class Solution {
   func sortedArrayToBST(_ nums: [Int]) -> TreeNode? {
+    guard !nums.isEmpty else { return nil }
+    guard nums.count != 1 else { return TreeNode(nums[0]) }
 
-    func helper(_ left: Int, _ right: Int) -> TreeNode? {
-      if left > right {
-        return nil
-      }
+    let midIdx: Int = nums.count / 2
 
-      let mid = (left + right) / 2
-      let root = TreeNode(nums[mid])
-      root.left = helper(left, mid - 1)
-      root.right = helper(mid + 1, right)
+    let rootNode: TreeNode? = TreeNode(nums[midIdx])
+    let leftNode: TreeNode? = sortedArrayToBST(Array(nums[0..<midIdx]))
+    let rightNode: TreeNode? = sortedArrayToBST(Array(nums[(midIdx + 1)...]))
 
-      return root
-    }
+    rootNode!.left = leftNode
+    rootNode!.right = rightNode
 
-    return helper(0, nums.count - 1)
+    return rootNode
   }
 }
