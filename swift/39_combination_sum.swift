@@ -1,26 +1,35 @@
 class Solution {
   func combinationSum(_ candidates: [Int], _ target: Int) -> [[Int]] {
-    var res: [[Int]] = []
-    var subset: [Int] = []
+    var curCombs: [[Int]] = []
+    var curComb: [Int] = []
+    var curSum: Int = 0
+    backtrack(
+      cand: candidates, target: target, curCombs: &curCombs, curSum: curSum, curIdx: 0,
+      curComb: &curComb)
+    return curCombs
+  }
 
-    func dfs(_ index: Int, _ sum: Int) {
-      if sum == target {
-        res.append(subset)
-        return
-      }
-
-      if sum > target || index >= candidates.count {
-        return
-      }
-
-      subset.append(candidates[index])
-      dfs(index, sum + candidates[index])
-
-      subset.removeLast()
-      dfs(index + 1, sum)
+  private func backtrack(
+    cand: [Int], target: Int, curCombs: inout [[Int]], curSum: Int, curIdx: Int,
+    curComb: inout [Int]
+  ) {
+    guard curSum != target else {
+      curCombs.append(curComb)
+      return
     }
 
-    dfs(0, 0)
-    return res
+    guard curSum <= target && curIdx < cand.count else {
+      return
+    }
+
+    curComb.append(cand[curIdx])
+    backtrack(
+      cand: cand, target: target, curCombs: &curCombs, curSum: curSum + cand[curIdx],
+      curIdx: curIdx, curComb: &curComb)
+    curComb.removeLast()
+
+    backtrack(
+      cand: cand, target: target, curCombs: &curCombs, curSum: curSum, curIdx: curIdx + 1,
+      curComb: &curComb)
   }
 }
