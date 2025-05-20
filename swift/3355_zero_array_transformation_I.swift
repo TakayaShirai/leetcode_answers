@@ -8,7 +8,7 @@ class Solution {
 
       diffArray[left] += 1
       guard right + 1 < diffArray.count else { continue }
-      diffArray[right + 1] -= 1 
+      diffArray[right + 1] -= 1
     }
 
     var curDecrement: Int = 0
