@@ -1,73 +1,79 @@
-public class TrieNode {
+// This file contains an implementation of a Trie (Prefix Tree) data structure.
+// It includes the main `Trie` class for handling operations and the internal
+// `TrieNode` class that represents each node in the tree.
 
-  var children: [Character: TrieNode]
-  var endOfWord: Bool
+import Foundation
 
-  init() {
-    self.children = [:]
-    self.endOfWord = false
-  }
-}
-
+/// A Trie is a tree-like data structure used to
+/// efficiently store and retrieve keys in a dataset of strings.
 class Trie {
-
-  var root: TrieNode
+  private let rootNode: TrieNode
 
   init() {
-    self.root = TrieNode()
+    rootNode = TrieNode()
   }
 
+  /// Inserts a word into the Trie.
+  ///
+  /// - Parameter word: The word to insert into the Trie.
   func insert(_ word: String) {
-    let wordArray = Array(word)
-    var cur = self.root
+    var curNode: TrieNode = rootNode
 
-    for char in wordArray {
-      if let child = cur.children[char] {
-        cur = child
+    for char in word {
+      if let childNode = curNode.children[char] {
+        curNode = childNode
       } else {
-        cur.children[char] = TrieNode()
-        cur = cur.children[char]!
+        let newNode = TrieNode()
+        curNode.children[char] = newNode
+        curNode = newNode
       }
     }
 
-    cur.endOfWord = true
+    curNode.isEndOfWord = true
   }
 
+  /// Searches for a word in the Trie to see if it exists as a complete word.
+  ///
+  /// - Parameter word: The word to search for.
+  /// - Returns: `true` if the word exists as a complete entry in the Trie, and `false` otherwise.
   func search(_ word: String) -> Bool {
-    let wordArray = Array(word)
-    var cur = self.root
+    var curNode: TrieNode = rootNode
 
-    for char in wordArray {
-      if cur.children[char] == nil {
-        return false
-      }
-
-      cur = cur.children[char]!
+    for char in word {
+      guard let childNode = curNode.children[char] else { return false }
+      curNode = childNode
     }
 
-    return cur.endOfWord
+    return curNode.isEndOfWord
   }
 
+  /// Determines if there is any word in the Trie that starts with the given prefix.
+  ///
+  /// - Parameter prefix: The prefix to check for.
+  /// - Returns: `true` if there is any word in the Trie with the given prefix, and `false` otherwise.
   func startsWith(_ prefix: String) -> Bool {
-    let prefixArray = Array(prefix)
-    var cur = self.root
+    var curNode: TrieNode = rootNode
 
-    for char in prefixArray {
-      if cur.children[char] == nil {
-        return false
-      }
-
-      cur = cur.children[char]!
+    for char in prefix {
+      guard let childNode = curNode.children[char] else { return false }
+      curNode = childNode
     }
 
     return true
   }
 }
 
-/**
- * Your Trie object will be instantiated and called as such:
- * let obj = Trie()
- * obj.insert(word)
- * let ret_2: Bool = obj.search(word)
- * let ret_3: Bool = obj.startsWith(prefix)
- */
+/// Represents a single node in the Trie.
+private class TrieNode {
+
+  /// A dictionary mapping a character to its corresponding child node.
+  var children: [Character: TrieNode]
+
+  /// A boolean flag indicating whether this node represents the end of a complete word.
+  var isEndOfWord: Bool
+
+  init(_ children: [Character: TrieNode] = [:], _ isEndOfWord: Bool = false) {
+    self.children = children
+    self.isEndOfWord = isEndOfWord
+  }
+}
